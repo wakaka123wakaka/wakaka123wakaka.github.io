@@ -151,11 +151,9 @@
     <div class="post-content" id="post-content" itemprop="postContent">
 
     
-        一、apache1、解析漏洞影响范围：1.apahce 与 php 是以 module 方式交互（phpinfo）
-
-apahce 全版本Apache 默认一个文件可以有多个以点分割的后缀，当最右边的后缀无法识别（不在 mime.types 文件内），则继续向左识别，直到识别到合法后缀才进行解析。
-
-2、AddHandler 导致的解析漏洞httpd.conf 中存在AddHandler a...
+        apache解析漏洞影响范围：1、apahce 与 php 是以 module 方式交互（phpinfo）2、apahce 全版本Apache 默认一个文件可以有多个以点分割的后缀，当最右边的后缀无法识别（不在 mime.types 文件内），则继续向左识别，直到识别到合法后缀才进行解析。
+AddHandler 导致的解析漏洞httpd.conf 中存在
+1AddHandler applic...
     
 
         <a href="/2020/07/28/dlvqrg/" class="post-more waves-effect waves-button">
@@ -196,7 +194,7 @@ apahce 全版本Apache 默认一个文件可以有多个以点分割的后缀，
     
         影响版本
 BIG-IP 15.x: 15.1.0/15.0.0BIG-IP 14.x: 14.1.0 ~ 14.1.2BIG-IP 13.x: 13.1.0 ~ 13.1.3BIG-IP 12.x: 12.1.0 ~ 12.1.5BIG-IP 11.x: 11.6.1 ~ 11.6.5
-1、环境搭建12下载https://downloads.f5.com/esd/ecc.sv?sw=BIG-...
+环境搭建12下载https://downloads.f5.com/esd/ecc.sv?sw=BIG-IP...
     
 
         <a href="/2020/07/28/pqp9in/" class="post-more waves-effect waves-button">
